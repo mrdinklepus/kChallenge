@@ -62,6 +62,14 @@ public class Elevator
     
     while(!floorsToStopAt.isEmpty())
     {
+      // NOTE: Ran out of time trying to think through this
+      // and make it function better.  Ultimately, here I want to find
+      // a way to optimize what happens when stops have been added
+      // in the opposite direction (by button pushes) while we've been 
+      // on our journey.  How to decide how best to proceed.  Maybe looking through the
+      // set here and finding the furthest from us and setting that as the destination?
+      // that way we should hit all the other floors in between as stops...
+      
       int floorDiff = floorNum - currentFloorNumber;
       if (floorDiff > 0)
       {
@@ -74,7 +82,7 @@ public class Elevator
           if (floorsToStopAt.contains(currentFloorNumber))
           {
             // We need to make a stop here
-            stop();
+            makeStop();
             floorsToStopAt.remove(currentFloorNumber);
           }
         }
@@ -90,7 +98,7 @@ public class Elevator
           if (floorsToStopAt.contains(currentFloorNumber))
           {
             // We need to make a stop here
-            stop();
+            makeStop();
             floorsToStopAt.remove(currentFloorNumber);
           }
         }
@@ -122,7 +130,7 @@ public class Elevator
     floorsToStopAt.add(floorNum);
   }
   
-  public void stop()
+  public void makeStop()
   {
     openDoors();
     Thread.sleep(1000 * 10); // wait 10 seconds?

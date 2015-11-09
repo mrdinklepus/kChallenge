@@ -9,6 +9,7 @@ import elevatorSimObjects.Elevator;
 
 public class BuildingController
 {
+  // Might not need this stored, but keeping it just in case we do
   private int numFloors;
   
   // Map the elevators to their current floors
@@ -68,7 +69,14 @@ public class BuildingController
     // For sake of time, we'll just explain what to do here
     // First, (not sure the most efficient here, but would figure it out)
     // perhaps loop through the map and check for closest elevator.  Check if its moving.
-    // If not, start it on a new trip.  If it is, check if we can just
+    // If not, start it on a new trip.  If it is, check if its moving toward the floor.
+    // If so, add the stop.  If not, continue and check the next closest elevator & so on.
+    // ALSO, verify that the elevator is available.
+    
+    // Ultimately, here we would have an algorithm looking for most probably the best case.
+    // we sort of have to think through and trade off the time to search through the list
+    // over and over looking fro the best case vs taking the first one (that can stop) we come to and assuming
+    // it is the best option.
   }
 
   public void requestMaintenance(Elevator elevator)
