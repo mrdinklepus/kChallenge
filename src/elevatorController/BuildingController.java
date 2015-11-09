@@ -17,10 +17,18 @@ public class BuildingController
   // Elevators NOT in maintenance
   private Set<Elevator> availableElevators = new HashSet<>();
   
-  
-  public BuildingController()
+  /**
+   * Initialization.  In the future, Probably make this more configurable
+   */
+  public BuildingController(int numFloors, int numElevators)
   {
-    
+    this.numFloors = numFloors;
+    for (int i = 0; i < numElevators; i++)
+    {
+      Elevator e = new Elevator(this, numFloors);
+      elevators.put(e, 1);
+      availableElevators.add(e);
+    }
   }
   
   /**
@@ -34,17 +42,33 @@ public class BuildingController
   
   public void requestElevatorToCome(int floorNum)
   {
+    Elevator elevator = findClosestAvailableElevator(floorNum);
     
+    if (elevator.isMoving())
+    {
+      elevator.addStopAtFloor(floorNum);
+    }
+    else
+    {
+      elevator.moveToFloor(floorNum);
+    }
   }
   
+  /**
+   * this might be internal to elevator?  
+   * For now, just assume the actual stimulus comes from the controller
+   */
   public void elevatorButtonPushed(Elevator elevator, int requestedFloorNum)
   {
     elevator.addStopAtFloor(requestedFloorNum);
   }
   
-  public void findClosestAvailableElevator(int forFloorNum)
+  public Elevator findClosestAvailableElevator(int forFloorNum)
   {
-    
+    // For sake of time, we'll just explain what to do here
+    // First, (not sure the most efficient here, but would figure it out)
+    // perhaps loop through the map and check for closest elevator.  Check if its moving.
+    // If not, start it on a new trip.  If it is, check if we can just
   }
 
   public void requestMaintenance(Elevator elevator)

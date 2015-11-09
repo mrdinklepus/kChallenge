@@ -14,6 +14,9 @@ public class Elevator
   private int maxFloorNum;
   private int maxTripsBeforeMaintenance = 100;
   
+  // quick indicator that we are moving
+  private boolean isMoving = false;
+  
   // addedStop
   private Set<Integer> floorsToStopAt = new HashSet<Integer>();
   
@@ -52,36 +55,44 @@ public class Elevator
       return false;
     }
     
-    int floorDiff = floorNum - currentFloorNumber;
-    if (floorDiff > 0)
+    isMoving = true;
+    
+    // Add our first stop
+    floorsToStopAt.add(floorNum);
+    
+    while(!floorsToStopAt.isEmpty())
     {
-      // Going Uuuuppppp!
-      while (currentFloorNumber < floorNum)
+      int floorDiff = floorNum - currentFloorNumber;
+      if (floorDiff > 0)
       {
-        currentFloorNumber++;
-        reportFloorChange();
-        floorsPassedThisTrip++;
-        if (floorsToStopAt.contains(currentFloorNumber))
+        // Going Uuuuppppp!
+        while (currentFloorNumber < floorNum)
         {
-          // We need to make a stop here
-          stop();
-          floorsToStopAt.remove(currentFloorNumber);
+          currentFloorNumber++;
+          reportFloorChange();
+          floorsPassedThisTrip++;
+          if (floorsToStopAt.contains(currentFloorNumber))
+          {
+            // We need to make a stop here
+            stop();
+            floorsToStopAt.remove(currentFloorNumber);
+          }
         }
       }
-    }
-    else
-    {
-      // Going Dddooowwwwwwnnnnn!
-      while (currentFloorNumber > floorNum)
+      else
       {
-        currentFloorNumber--;
-        reportFloorChange();
-        floorsPassedThisTrip++;
-        if (floorsToStopAt.contains(currentFloorNumber))
+        // Going Dddooowwwwwwnnnnn!
+        while (currentFloorNumber > floorNum)
         {
-          // We need to make a stop here
-          stop();
-          floorsToStopAt.remove(currentFloorNumber);
+          currentFloorNumber--;
+          reportFloorChange();
+          floorsPassedThisTrip++;
+          if (floorsToStopAt.contains(currentFloorNumber))
+          {
+            // We need to make a stop here
+            stop();
+            floorsToStopAt.remove(currentFloorNumber);
+          }
         }
       }
     }
@@ -91,6 +102,7 @@ public class Elevator
     {
       reportNeedMaintenance();
     }
+    isMoving = false;
     
     return true;
   }
@@ -130,5 +142,11 @@ public class Elevator
     // Do stuff.  Once the doors are closed, return true.
     // If there is a problem, return false (we don't want to start again with the doors open!)
     return true;
+  }
+
+  public boolean isMoving()
+  {
+    // TODO Auto-generated method stub
+    return false;
   }
 }
