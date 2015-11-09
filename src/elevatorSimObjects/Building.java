@@ -1,4 +1,6 @@
-package src.elevatorSimObjects;
+package elevatorSimObjects;
+
+import java.util.List;
 
 public class Building
 {
