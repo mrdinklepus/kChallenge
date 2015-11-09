@@ -5,11 +5,13 @@ import java.util.List;
 public class Building
 {
   private int numFloors;
-  private List<Elevator> elevators;
+  private Set<Elevator> elevators;
   
-  public Building(int numFloors, List<Elevator> elevators)
+  public Building(int numFloors, Set<Elevator> elevators)
   {
     this.numFloors = numFloors;
     this.elevators = elevators;
   }
+  
+  public 
 }

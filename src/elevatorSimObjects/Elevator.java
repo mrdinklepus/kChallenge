@@ -1,4 +1,4 @@
-package src.elevatorSimObjects;
+package elevatorSimObjects;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +12,7 @@ public class Elevator
   private Integer currentFloorNumber = 1;  // Assume elevators all start at floor 1
   private int floorsPassedThisTrip = 0;
   private int maxFloorNum;
+  private int maxTripsBeforeMaintenance = 100;
   
   // addedStop
   private Set<Integer> floorsToStopAt = new HashSet<Integer>();
@@ -25,9 +26,13 @@ public class Elevator
   /**
    * This constitutes starting a 'trip'
    * This should be done in its own thread independent of other elevators
+   * Returns true if the move was successful.  False nothing changed as a result of the call
    */
-  public void moveToFloor(Integer floorNum)
+  public boolean moveToFloor(Integer floorNum)
   {
+    floorsPassedThisTrip = 0;
+    
+    // Some Safety Checks
     if (floorNum < 1 || floorNum > maxFloorNum)
     {
       // Create this exception
@@ -36,7 +41,15 @@ public class Elevator
     else if (floorNum == currentFloorNumber)
     {
       // Probly shouldn't happen, but we'll account for it anyway
-      return;
+      return false;
+    }
+    
+    if (totalTrips > maxTripsBeforeMaintenance)
+    {
+      // We should have reported at the end of last trip,
+      // So in theory we shouldn't get this request.  But check anyway
+      reportNeedMaintenance();
+      return false;
     }
     
     int floorDiff = floorNum - currentFloorNumber;
@@ -47,6 +60,7 @@ public class Elevator
       {
         currentFloorNumber++;
         reportFloorChange();
+        floorsPassedThisTrip++;
         if (floorsToStopAt.contains(currentFloorNumber))
         {
           // We need to make a stop here
@@ -62,6 +76,7 @@ public class Elevator
       {
         currentFloorNumber--;
         reportFloorChange();
+        floorsPassedThisTrip++;
         if (floorsToStopAt.contains(currentFloorNumber))
         {
           // We need to make a stop here
@@ -70,6 +85,14 @@ public class Elevator
         }
       }
     }
+    
+    totalTrips++;
+    if (totalTrips > maxTripsBeforeMaintenance)
+    {
+      reportNeedMaintenance();
+    }
+    
+    return true;
   }
   
   public void reportFloorChange()
@@ -79,7 +102,7 @@ public class Elevator
   
   public void reportNeedMaintenance()
   {
-    
+    controller.requestMaintenance(this);
   }
   
   public void addStopAtFloor(Integer floorNum)
@@ -99,7 +122,7 @@ public class Elevator
   
   public void openDoors()
   {
-    
+    // Open sesame!
   }
   
   public boolean closeDoors()
