@@ -6,7 +6,7 @@ NOTES:
 Written in Java.
 
 Possibly could have mapped out more sub objects & stuff here, but tried to simplify and ended up
-with only 2 classes - A controller for the building elevators, and the elevators themselves. (I had a 'Building' class, but really it was the same as the controller, so opted to remove it)
+with only 3 classes - A Building, a controller for the building elevators, and the elevators themselves. (I had a 'Building' class, but really it was the same as the controller, so opted to remove it, but then added it back again.  The only real purpose of the building is that it contains the others.  An elevator would be of no purpose outside of a building, so it is important.)
 
 the elevators should be pretty self sufficient, receiving commands and figuring out the best
 way to carry them out (smart enough to stop at each floor that has been requested)

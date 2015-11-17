@@ -21,15 +21,19 @@ public class BuildingController
   /**
    * Initialization.  In the future, Probably make this more configurable
    */
-  public BuildingController(int numFloors, int numElevators)
+  public BuildingController(int numFloors)
   {
     this.numFloors = numFloors;
-    for (int i = 0; i < numElevators; i++)
-    {
-      Elevator e = new Elevator(this, numFloors);
-      elevators.put(e, 1);
-      availableElevators.add(e);
-    }
+  }
+  
+  public void addElevator(Elevator elevator)
+  {
+    availableElevators.add(elevator);
+  }
+  
+  public void removeElevator(Elevator elevator)
+  {
+    availableElevators.remove(elevator);
   }
   
   /**
